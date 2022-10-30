@@ -1,1 +1,1 @@
-https://eldarnasritdinov.github.io/calculator/calculator.html
+COPY THIS LINK: https://eldarnasritdinov.github.io/projects/calculator.html

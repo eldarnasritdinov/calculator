@@ -1,1 +1,1 @@
-# calculator.com
+https://eldarnasritdinov.github.io/calculator/calculator.html

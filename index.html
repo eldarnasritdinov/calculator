@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Number Selection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      padding: 10px;
+    }
+    
+    label {
+      margin-bottom: 10px;
+    }
+    
+    input[type="number"] {
+      width: 50px;
+      margin-right: 5px;
+    }
+    
+    .boxes {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px;
+    }
+    
+    .box {
+      width: 50px;
+      height: 30px;
+      border: 1px solid #000;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .result {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    
+    button {
+      padding: 10px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <label for="number">Линейная Коррелляция. Выбери сколько чисел в X и Y:</label>
+    <input type="number" id="number" min="1" />
+    <button onclick="generateBoxes()">Создать X, Y</button>
+    <div class="boxes">
+      <div class="column">
+        <label>X</label>
+        <div id="xValues"></div>
+        <div id="avgX"></div>
+        <div id="aValue"></div>
+      </div>
+      <div class="column">
+        <label>Y</label>
+        <div id="yValues"></div>
+        <div id="avgY"></div>
+        <div id="bValue"></div>
+      </div>
+      <div class="column">
+        <label>X * Y</label>
+        <div id="xyValues"></div>
+        <div id="avgXY"></div>
+      </div>
+      <div class="column">
+        <label>X^2</label>
+        <div id="xSquaredValues"></div>
+        <div id="avgXSquared"></div>
+      </div>
+      <div class="column">
+        <label>Y^2</label>
+        <div id="ySquaredValues"></div>
+        <div id="avgYSquared"></div>
+      </div>
+      <div class="column">
+        <label>Yx</label>
+        <div id="yxValues"></div>
+        <div id="avgYx"></div>
+      </div>
+      <div class="column">
+        <label>Ai</label>
+        <div id="aiValues"></div>
+        <div id="avgAi"></div>
+      </div>
+    </div>
+    <div class="result" id="result"></div>
+    <button onclick="calculate()">Посчитать</button>
+  </div>
+
+  <script>
+    var xValues = [];
+    var yValues = [];
+
+    function generateBoxes() {
+      var number = document.getElementById("number").value;
+      var xValuesDiv = document.getElementById("xValues");
+      var yValuesDiv = document.getElementById("yValues");
+      
+      xValuesDiv.innerHTML = "";
+      yValuesDiv.innerHTML = "";
+      xValues = [];
+      yValues = [];
+      
+      for (var i = 0; i < number; i++) {
+        var xInput = document.createElement("input");
+        xInput.type = "number";
+        xInput.className = "box";
+        xInput.placeholder = "X" + (i + 1);
+        
+        var yInput = document.createElement("input");
+        yInput.type = "number";
+        yInput.className = "box";
+        yInput.placeholder = "Y" + (i + 1);
+        
+        xValuesDiv.appendChild(xInput);
+        yValuesDiv.appendChild(yInput);
+
+        xValues.push(xInput);
+        yValues.push(yInput);
+      }
+    }
+
+    function calculate() {
+      var xyValuesDiv = document.getElementById("xyValues");
+      var xSquaredValuesDiv = document.getElementById("xSquaredValues");
+      var ySquaredValuesDiv = document.getElementById("ySquaredValues");
+      var avgXDiv = document.getElementById("avgX");
+      var avgYDiv = document.getElementById("avgY");
+      var avgXYDiv = document.getElementById("avgXY");
+      var avgXSquaredDiv = document.getElementById("avgXSquared");
+      var avgYSquaredDiv = document.getElementById("avgYSquared");
+      var aValueDiv = document.getElementById("aValue");
+      var bValueDiv = document.getElementById("bValue");
+      var resultDiv = document.getElementById("result");
+      var yxValuesDiv = document.getElementById("yxValues");
+      var aiValuesDiv = document.getElementById("aiValues");
+      var avgAiDiv = document.getElementById("avgAi");
+
+      xyValuesDiv.innerHTML = "";
+      xSquaredValuesDiv.innerHTML = "";
+      ySquaredValuesDiv.innerHTML = "";
+      avgXDiv.innerHTML = "";
+      avgYDiv.innerHTML = "";
+      avgXYDiv.innerHTML = "";
+      avgXSquaredDiv.innerHTML = "";
+      avgYSquaredDiv.innerHTML = "";
+      aValueDiv.innerHTML = "";
+      bValueDiv.innerHTML = "";
+      resultDiv.innerHTML = "";
+      yxValuesDiv.innerHTML = "";
+      aiValuesDiv.innerHTML = "";
+      avgAiDiv.innerHTML = "";
+
+      var n = xValues.length;
+      var sumX = 0;
+      var sumY = 0;
+      var sumXY = 0;
+      var sumXSquared = 0;
+      var sumYSquared = 0;
+      var sumYx = 0;
+
+      for (var i = 0; i < n; i++) {
+        var x = Number(xValues[i].value);
+        var y = Number(yValues[i].value);
+
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXSquared += x * x;
+        sumYSquared += y * y;
+        sumYx += y / x;
+
+        var xyInput = document.createElement("input");
+        xyInput.type = "text";
+        xyInput.className = "box";
+        xyInput.value = x * y;
+
+        var xSquaredInput = document.createElement("input");
+        xSquaredInput.type = "text";
+        xSquaredInput.className = "box";
+        xSquaredInput.value = x * x;
+
+        var ySquaredInput = document.createElement("input");
+        ySquaredInput.type = "text";
+        ySquaredInput.className = "box";
+        ySquaredInput.value = y * y;
+
+        xyValuesDiv.appendChild(xyInput);
+        xSquaredValuesDiv.appendChild(xSquaredInput);
+        ySquaredValuesDiv.appendChild(ySquaredInput);
+      }
+
+      var avgX = sumX / n;
+      var avgY = sumY / n;
+      var avgXY = sumXY / n;
+      var avgXSquared = sumXSquared / n;
+      var avgYSquared = sumYSquared / n;
+      var avgYx = sumYx / n;
+
+      var b = (avgXY - avgX * avgY) / (avgXSquared - avgX * avgX);
+      var a = avgY - b * avgX;
+
+      var avgXInput = document.createElement("input");
+      avgXInput.type = "text";
+      avgXInput.className = "box";
+      avgXInput.value = avgX;
+
+      var avgYInput = document.createElement("input");
+      avgYInput.type = "text";
+      avgYInput.className = "box";
+      avgYInput.value = avgY;
+
+      var avgXYInput = document.createElement("input");
+      avgXYInput.type = "text";
+      avgXYInput.className = "box";
+      avgXYInput.value = avgXY;
+
+      var avgXSquaredInput = document.createElement("input");
+      avgXSquaredInput.type = "text";
+      avgXSquaredInput.className = "box";
+      avgXSquaredInput.value = avgXSquared;
+
+      var avgYSquaredInput = document.createElement("input");
+      avgYSquaredInput.type = "text";
+      avgYSquaredInput.className = "box";
+      avgYSquaredInput.value = avgYSquared;
+
+      var avgYxInput = document.createElement("input");
+      avgYxInput.type = "text";
+      avgYxInput.className = "box";
+      avgYxInput.value = avgYx;
+
+      var aInput = document.createElement("input");
+      aInput.type = "text";
+      aInput.className = "box";
+      aInput.value = a;
+
+      var bInput = document.createElement("input");
+      bInput.type = "text";
+      bInput.className = "box";
+      bInput.value = b;
+
+      avgXDiv.appendChild(document.createTextNode("AVG(X): "));
+      avgXDiv.appendChild(avgXInput);
+
+      avgYDiv.appendChild(document.createTextNode("AVG(Y): "));
+      avgYDiv.appendChild(avgYInput);
+
+      avgXYDiv.appendChild(document.createTextNode("AVG(X * Y): "));
+      avgXYDiv.appendChild(avgXYInput);
+
+      avgXSquaredDiv.appendChild(document.createTextNode("AVG(X^2): "));
+      avgXSquaredDiv.appendChild(avgXSquaredInput);
+
+      avgYSquaredDiv.appendChild(document.createTextNode("AVG(Y^2): "));
+      avgYSquaredDiv.appendChild(avgYSquaredInput);
+
+      avgAiDiv.appendChild(document.createTextNode("WTF: "));
+      avgAiDiv.appendChild(avgYxInput);
+
+      aValueDiv.appendChild(document.createTextNode("a: "));
+      aValueDiv.appendChild(aInput);
+
+      bValueDiv.appendChild(document.createTextNode("b: "));
+      bValueDiv.appendChild(bInput);
+
+      for (var i = 0; i < n; i++) {
+        var x = Number(xValues[i].value);
+        var y = Number(yValues[i].value);
+
+        var yxResult = a + b * x;
+        var aiResult = y - (yxResult / y);
+
+        var yxInput = document.createElement("input");
+        yxInput.type = "text";
+        yxInput.className = "box";
+        yxInput.value = yxResult;
+
+        var aiInput = document.createElement("input");
+        aiInput.type = "text";
+        aiInput.className = "box";
+        aiInput.value = aiResult;
+
+        yxValuesDiv.appendChild(yxInput);
+        aiValuesDiv.appendChild(aiInput);
+      }
+
+      var result = document.createElement("div");
+      result.textContent = `Sum of (X * Y): ${sumXY} | Sum of X Squared: ${sumXSquared} | Sum of Y Squared: ${sumYSquared}`;
+      resultDiv.appendChild(result);
+    }
+  </script>
+</body>
+</html>
